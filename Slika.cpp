@@ -1,5 +1,7 @@
 #include "Slika.h"
 #include <utility>
+#include <cmath>
+#include "XMLFormatter.h"
 using namespace std;
 
 Slika* Slika::instance = nullptr;
@@ -18,6 +20,7 @@ void Slika::deleteInstance()
 {
 	for (Layer* l : Slika::instance->layers)   
 		delete l;
+	Slika::instance->selection_map.clear();
 }
 
 string Slika::findImageFormat(const string& path)
@@ -27,6 +30,22 @@ string Slika::findImageFormat(const string& path)
 	regex_match(path, result, rx); //dobro odredjuje format dokumenta samo ako se koristi getline!!!!!
 	string format = result.str(2);
 	return format;
+}
+void Slika::addEmptyLayer(int _height, int _width)
+{
+	Layer* l = new Layer(_height, _width);
+	for (vector<Pixel*>& v : l->pxvec)
+	{
+		v.resize(_width, new Pixel(255, 255, 255, 0));
+	
+	}
+	layers.resize(layers.size() + 1);
+	for (int i = layers.size() - 1; i > 0; i--)
+		layers[i] = layers[i - 1];
+	layers[0] = l;
+	this->height = (*max_element(layers.begin(), layers.end(), [](Layer* a, Layer* b)->bool {return a->getHeight() < b->getHeight(); }))->getHeight();
+	this->width = (*max_element(layers.begin(), layers.end(), [](Layer* a, Layer* b)->bool {return a->getWidth() < b->getWidth(); }))->getWidth();
+	l->fillWithTransparentPixels(this->getHeight(), this->getWidth());
 }
 
 void Slika::addLayer(const string& layer_path, int _opacity)
@@ -38,10 +57,7 @@ void Slika::addLayer(const string& layer_path, int _opacity)
 	else
 		if (format == "pam")
 			f = new PAMFormatter(layer_path);
-		else
-		/*	if (format == "xml" || format == "XML")
-				f = XMLFormatter(layer_path);
-			else*/
+			else
 				throw GNeodgovarajuciTipFajla();
 	
 	//Ubaci dobijeni layer na pocetak niza layera
@@ -61,6 +77,16 @@ void Slika::addLayer(const string& layer_path, int _opacity)
 		l->setHeight(this->getHeight());
 		l->setWidth(this->getWidth());
 	}
+}
+
+void Slika::loadFromXML(const string& path)
+{
+	Formatter* f = nullptr;
+	string format = findImageFormat(path);
+	if (format != "xml")
+		throw GNeodgovarajuciTipFajla();
+
+	f = new XMLFormatter(path, *this);
 }
 
 void Slika::setSelectionToActive(const string& name)
@@ -152,9 +178,9 @@ void Slika::save(const string& path)
 		if (format == "pam")
 			f = new PAMFormatter();
 		else
-		/*	if (format == "xml")
+			if (format == "xml")
 				f = new XMLFormatter();
-			else*/
+			else
 				throw GNeodgovarajuciTipFajla();
 	f->save(path, *this);
 	exported = true;
@@ -223,7 +249,7 @@ void Slika::fixOverflow()
 							auto startw = v.begin() + rec->getLeft();
 							auto endw = startw + rec->getWidth();
 							for_each(startw, endw, [this](Pixel* p) {
-								p->setParameters(p->getRed() % 256, p->getGreen() % 256, p->getBlue() % 256, p->getAlpha());
+								p->setParameters(abs(p->getRed() % 256), abs(p->getGreen() % 256), abs(p->getBlue() % 256), p->getAlpha());
 								});
 							});
 					}
@@ -235,7 +261,7 @@ void Slika::fixOverflow()
 		{
 			for_each(l->pxvec.begin(), l->pxvec.end(), [this](vector<Pixel*>& v) {
 				for_each(v.begin(), v.end(), [this](Pixel* p) {
-					p->setParameters(p->getRed() % 256, p->getGreen() % 256, p->getBlue() % 256, p->getAlpha());
+					p->setParameters(abs(p->getRed() % 256), abs(p->getGreen() % 256), abs(p->getBlue() % 256), p->getAlpha());
 					});
 				});
 		}

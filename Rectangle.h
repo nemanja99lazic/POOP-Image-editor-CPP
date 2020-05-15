@@ -3,7 +3,7 @@
 class Rectangle
 {
 public:
-	Rectangle(int, int, int, int);
+	Rectangle(int _up, int _left, int _height, int _width);
 	int getUp() const
 	{
 		return up;

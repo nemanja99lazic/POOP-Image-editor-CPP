@@ -1,110 +1,69 @@
-/*
-#include "Menu.h"
 #include <iostream>
+#include "Menu.h"
+using namespace std;
 
-using std::cout;
-using std::endl;
-using std::cin;
-
-void GlavniMeni::ispisiMeni() const
+void Menu::writeBeforeMain()
 {
+	cout << "Unesi opciju: " << endl;
+	cout << "1. Ucitavanje prazne slike sa zadavanjem dimenzija: " << endl;
+	cout << "2. Zadaj putanju do slike:" << endl;
+	cout << "3. Ucitaj sacuvano stanje slike iz XML datoteke" << endl;
+	cout << "Opcija:";
+}
+
+void Menu::writeMain()
+{
+	cout << endl;
 	cout << "GLAVNI MENI:" << endl;
-	cout << "1. Ucitavanje slike" << endl;
-	cout << "2. Rad sa slikom" << endl;
-	cout << "3. Eksportuj sliku" << endl;
-	cout << "4. Snimi projekat kao XML fajl" << endl;
-	cout << "0. Izlaz iz aplikacije" << endl;
+	cout << "Unesi opciju: " << endl;
+	cout << "1. Rad sa slojevima" << endl;
+	cout << "2. Rad sa selekcijama" << endl;
+	cout << "3. Operacije" << endl;
+	cout << "4. Eksportuj" << endl;
+	cout << "0. Kraj rada" << endl;
+	cout << "Opcija:";
 }
 
-void Menu::izaberiOpciju()
+void Menu::writeLayerMenu()
 {
-	cout << "Izaberi opciju:" << endl;
-	cin >> opcija;
+	cout << endl;
+	cout << "MENI ZA RAD SA SLOJEVIMA" << endl;
+	cout << "Izaberi opciju" << endl;
+	cout << "1. Dodaj sloj" << endl;
+	cout << "2. Promeni neprozirnost sloja" << endl;
+	cout << "3. Aktiviraj sloj" << endl;
+	cout << "4. Deaktiviraj sloj" << endl;
+	cout << "5. Izbrisi sloj" << endl;
+	cout << "0. Vrati se nazad" << endl;
+	cout << "Opcija: ";
 }
 
-int Menu::dohvatiOpciju() const
+void Menu::writeSelectionMenu()
 {
-	return opcija;
+	cout << endl;
+	cout << "MENI ZA RAD SA SELEKCIJAMA" << endl;
+	cout << "1. Dodaj selekciju" << endl;
+	cout << "2. Aktiviraj selekciju" << endl;
+	cout << "3. Deaktiviraj selekciju" << endl;
+	cout << "4. Izbrisi selekciju" << endl;
+	cout << "5. Popuni selekciju zadatom bojom" << endl;
+	cout << "0. Vrati se nazad" << endl;
+	cout << "Opcija: ";
 }
 
-void GlavniMeni::izaberiOpciju()
+void Menu::writeOperationMenu()
 {
-	Menu::izaberiOpciju();
-	if (opcija < 0 || opcija>4)
-		throw GNePostojiOpcija();
+	cout << endl;
+	cout << "MENI ZA RAD SA OPERACIJAMA" << endl;
+	cout << "1. Ucitaj operacije pomocu standardnog ulaza i primeni na slici" << endl;
+	cout << "2. Ucitaj operacije iz datoteke i primeni na slici" << endl;
+	cout << "3. Ucitaj operacije pomocu standardnog ulaza i sacuvaj ih u datoteku ne primenjujuci ih na sliku" << endl;
+	cout << "4. Vrati se nazad" << endl;
 }
 
-void Opcija1Meni::ispisiMeni() const
+void Menu::writeExportMenu()
 {
-	cout << "Unesi apsolutnu putanju do slike:"<<endl;
+	cout << endl;
+	cout << "EKSPORTOVANJE" << endl;
+	cout << "Unesi putanju do datoteke u kojoj ce se cuvati slika" << endl;
 }
-
-void Menu::unesiPutanju()
-{
-	string putanja;
-	cin.ignore();
-	std::getline(cin, putanja);
-	this->putanja = putanja;
-}
-
-string Menu::dohvatiPutanju() const
-{
-	return this->putanja;
-}
-
-void Opcija3Meni::ispisiMeni() const
-{
-	cout << "Cuvanje slike" << endl;
-	cout << "Unesi ime slike u formatu ime_slike.format_slike (slika ce biti sacuvana u folderu Resources): " << endl;
-}
-
-void Opcija3Meni::unesiImeSlikeZaCuvanje()
-{
-	cin.ignore();
-	cin >> ime_slike_za_cuvanje;
-	ime_slike_za_cuvanje = "\\Resources\\" + ime_slike_za_cuvanje;
-}
-
-string Opcija3Meni::dohvatiImeSlikeZaCuvanje() const
-{
-	return ime_slike_za_cuvanje;
-}
-
-Slika* GlavniMeni::obradiOpciju(Slika* img_old)
-{
-	Slika* img = nullptr;
-	switch (opcija)
-	{
-	case 1:
-	{
-		Menu* m1 = new Opcija1Meni();
-		m1->ispisiMeni();
-		m1->unesiPutanju();
-		img = new Slika(m1->dohvatiPutanju());
-		delete m1;
-	}
-	break;
-	case 2:
-	{
-
-	}
-	break;
-	case 3:
-	{
-		Opcija3Meni& m3 = *(new Opcija3Meni);
-		m3.ispisiMeni();
-		m3.unesiImeSlikeZaCuvanje();
-		img_old->sacuvajUOdgovarajucemFormatu(m3.dohvatiImeSlikeZaCuvanje());
-		delete &m3;
-		return img_old;
-	}
-	break;
-	case 4:
-	{
-
-	}
-	break;
-	}
-	return img;
-}
-*/

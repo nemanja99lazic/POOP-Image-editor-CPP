@@ -26,6 +26,7 @@ public:
 	}
 	Selection& getSelectionByName(const string& name);
 	void addLayer(const string&, int = 100);
+	void addEmptyLayer(int _height, int _width);
 	void setLayerToActive(int b)
 	{
 		if ((unsigned)b >= layers.size())
@@ -50,19 +51,26 @@ public:
 	}
 	void deleteLayer(int);
 	void addSelection(const string& name);
+	void deleteSelection(const string& name)
+	{
+		setSelectionToInactive(name); // u ovo funkciji proverava da li selekcija postoji i da li ce posle njenog deaktiviranja ostati aktiviranih layera
+		selection_map.erase(name);
+	}
 	void setSelectionToActive(const string& name);
 	void setSelectionToInactive(const string& name);
 	void setOperationThenApply(Operation* _operation)
 	{
 		operation = _operation;
-		int cnst;
-		cout << "Unesi konstantu operacije" << endl;
-		cin >> cnst;
-		this->applyOperation(cnst);
+		this->applyOperation(_operation->getConstant());
 		this->fixOverflow();
 		delete _operation;
 	}
+	void loadFromXML(const string&);
 	void save(const string&);
+	bool isExported()
+	{
+		return exported;
+	}
 	~Slika();
 private:
 	Slika() { width = 0; height = 0;}
@@ -70,6 +78,7 @@ private:
 	static void deleteInstance();
 	friend class BMPFormatter;
 	friend class PAMFormatter;
+	friend class XMLFormatter;
 	static string findImageFormat(const string&);
 	void insertInVector(vector<Pixel*>&, const vector<vector<Pixel*>>&, int, int, int, int, int, int);
 	void applyOperation(int);

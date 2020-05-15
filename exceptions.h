@@ -56,6 +56,32 @@ public:
 	}
 };
 
+class GNePostojiSacuvanaDatotekaSloja : public std::exception
+{
+public:
+	const char* what() const override
+	{
+		return "Datoteka sa sacuvanim slojem ne postoji ili je ostecena";
+	}
+};
+
+class GNePostojiOperacijaUHardkodovanojFunkciji : public std::exception
+{
+public:
+	const char* what() const override
+	{
+		return "U funkciji Operation* CompositeOperation::getPtrOnFunctionType(const string type) ne postoji odgovarajuca funkcija";
+	}
+};
+
+class GRedniBrojVanGranica : public std::exception
+{
+public:
+	const char* what() const override
+	{
+		return "Uneti redni broj je van granica niza slojeva";
+	}
+};
 
 #endif
 

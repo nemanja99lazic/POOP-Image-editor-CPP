@@ -54,12 +54,6 @@ private:
 
 };
 
-class XMLFormatter : public Formatter
-{
-public:
-	XMLFormatter() {}
-};
-
 class BMPFormatter : public Formatter
 {
 public:

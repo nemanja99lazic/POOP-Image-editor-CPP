@@ -21,9 +21,18 @@ public:
 		return active;
 	}
 	void fillWithColor(int red, int green, int blue, vector<Layer*> layers);
+	void deleteSelection()
+	{
+		rec_vector.clear();
+		active = false;
+	}
 	vector<Rectangle*>& getRectangleVector()
 	{
 		return rec_vector;
+	}
+	~Selection()
+	{
+		deleteSelection();
 	}
 private:
 	vector<Rectangle*> rec_vector;

@@ -9,7 +9,7 @@ using namespace std;
 class Layer
 {
 public:
-	Layer(int, int, bool _active = true, int _opacity = 100);
+	Layer(int _height, int _width, bool _active = true , int _opacity = 100, const string& path = "");
 	int getHeight() const
 	{
 		return height;
@@ -48,6 +48,18 @@ public:
 		opac = opac > 100 ? 100 : opac;
 		opacity = opac;
 	}
+	bool isActive() const
+	{
+		return active;
+	}
+	int getOpacity() const
+	{
+		return opacity;
+	}
+	string& getPath()
+	{
+		return this->path;
+	}
 	~Layer();
 private:
 	friend class Slika;
@@ -61,7 +73,7 @@ private:
 	vector<vector<Pixel*>> pxvec;
 	friend class BMPFormatter;
 	friend class PAMFormatter;
-	//string putanja;
+	friend class XMLFormatter;
 };
 
 #endif
